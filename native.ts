@@ -125,17 +125,8 @@ function setup() {
         },
     });
 
-    // Squirrel.Mac (electron autoUpdater) events, in case the updater in use goes through it
-    try {
-        const squirrel = autoUpdater as EventEmitter;
-        squirrel.on("update-downloaded", () => schedule("autoUpdater update-downloaded"));
-        squirrel.on("before-quit-for-update", () => schedule("autoUpdater before-quit-for-update"));
-    } catch { /* autoUpdater is unavailable in some Electron builds */ }
-
     // Any quit may be an update restart; the watcher is a no-op and exits after a few minutes if nothing changed
     app.on("before-quit", () => schedule("before-quit"));
-    app.on("will-quit", () => schedule("will-quit"));
-    process.once("exit", () => schedule("exit"));
 }
 
 if (process.platform === "darwin") setup();
